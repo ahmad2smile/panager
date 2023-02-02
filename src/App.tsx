@@ -1,38 +1,29 @@
-import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
-import { open } from "@tauri-apps/api/dialog";
-import { desktopDir } from "@tauri-apps/api/path";
 import {
 	isPermissionGranted,
 	requestPermission,
 	sendNotification
 } from "@tauri-apps/api/notification";
-import { ProcessingFile } from "./models/ProcessingFile";
-import { processFile } from "./utils/processFile";
+import { useFileExplorerState } from "./utils/file";
+import React, { useState } from "react";
 
 function App() {
-	const [selectedFiles, setSelectedFiles] = useState<ProcessingFile[]>([]);
+	const [selectedPdfFiles, triggerPdfDialogOpen] = useFileExplorerState({
+		filters: [{ name: "Pdf", extensions: ["pdf"] }]
+	});
+	const [selectedExcelFiles, triggerExcelDialogOpen] = useFileExplorerState({
+		filters: [{ name: "Excel", extensions: ["xlsx"] }]
+	});
+	const [excelColIndex, setExcelColIndex] = useState<number>(0);
 
-	const handleFilesPick = async () => {
-		// Open a selection dialog for directories
-		const selected = await open({
-			multiple: true,
-			defaultPath: await desktopDir()
-		});
-		if (Array.isArray(selected)) {
-			// user selected multiple directories
-			setSelectedFiles(await Promise.all(selected.map(processFile)));
-		} else if (selected === null) {
-			// user cancelled the selection
-		} else {
-			setSelectedFiles([await processFile(selected)]);
-			// user selected a single directory
-		}
+	const handleExcelColNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+		// -1 Humanizer
+		setExcelColIndex(event.target.valueAsNumber - 1);
 	};
 
-	const handleProcessingFiles = async () => {
+	const handlePdfProcessing = async () => {
 		let permissionGranted = await isPermissionGranted();
 		if (!permissionGranted) {
 			const permission = await requestPermission();
@@ -40,12 +31,32 @@ function App() {
 		}
 
 		try {
-			const results = await Promise.all(
-				selectedFiles.map((f) => {
+			const excelFile = selectedExcelFiles[0];
+			const cols = await invoke<string[]>("read_excel_columns", {
+				colIndex: excelColIndex,
+				sheet: "Files Sheet",
+				fileName: excelFile.name,
+				filePath: excelFile.path
+			});
+			const prefixCols = await invoke<string[]>("read_excel_columns", {
+				colIndex: excelColIndex + 1,
+				sheet: "Files Sheet",
+				fileName: excelFile.name,
+				filePath: excelFile.path
+			});
+
+			const results = await Promise.all(selectedPdfFiles).then((files) =>
+				files.map((f) => {
+					const rowVal = cols.find((c) => f.name.replace(`.${f.extension}`, "") === c);
+					const col = cols.indexOf(rowVal ?? "");
+					const prefixValue = prefixCols[col];
+					const prefixHeader = prefixValue ? `${prefixValue} ` : "";
+					const prefixName = prefixValue ? `${prefixValue}_` : "";
+
 					invoke("add_pdf_header", {
-						headerText: `Modified ${f.name}`,
-						name: f.name,
-						srcPath: f.path,
+						headerText: prefixHeader + f.name,
+						file: `${f.path}/${f.name}`,
+						destName: prefixName + f.name,
 						destPath: `${f.path}/generated`
 					});
 				})
@@ -72,23 +83,50 @@ function App() {
 
 			<div className="row">
 				<div>
-					<button type="button" onClick={handleFilesPick}>
-						Select Files
+					<button type="button" onClick={triggerPdfDialogOpen}>
+						Select Pdf Files
 					</button>
 				</div>
 			</div>
 			<div className="container">
-				{selectedFiles.length > 0 && <p>Total Selected files: {selectedFiles.length}</p>}
-				{selectedFiles.length > 0 &&
-					selectedFiles.map((f) => (
+				<div className="row">
+					<label htmlFor="excel-index-number">Excel Column</label>
+					<input
+						placeholder="Enter Colum Number of File Names"
+						id="excel-index-number"
+						type="number"
+						min={1}
+						onChange={handleExcelColNumber}
+					/>
+				</div>
+				<div className="row">
+					<button type="button" onClick={triggerExcelDialogOpen}>
+						Select Excel File
+					</button>
+				</div>
+			</div>
+			<div className="container">
+				{selectedPdfFiles.length > 0 && <p>Pdf files: {selectedPdfFiles.length}</p>}
+				{selectedPdfFiles.length > 0 &&
+					selectedPdfFiles.map((f) => (
 						<div className="row" key={f.name}>
 							<p>{f.name}</p>
 						</div>
 					))}
-				{selectedFiles.length == 0 && <p>No Files Selected</p>}
+				{selectedPdfFiles.length == 0 && <p>No Pdf Files Selected</p>}
+			</div>
+			<div className="container">
+				{selectedExcelFiles.length > 0 && <p>Excel files: {selectedExcelFiles.length}</p>}
+				{selectedExcelFiles.length > 0 &&
+					selectedExcelFiles.map((f) => (
+						<div className="row" key={f.name}>
+							<p>{f.name}</p>
+						</div>
+					))}
+				{selectedExcelFiles.length == 0 && <p>No Excel File Selected</p>}
 			</div>
 			<div>
-				<button type="button" onClick={handleProcessingFiles}>
+				<button type="button" onClick={handlePdfProcessing}>
 					Process Files
 				</button>
 			</div>

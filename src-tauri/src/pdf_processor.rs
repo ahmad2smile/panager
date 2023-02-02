@@ -9,11 +9,10 @@ use std::path;
 
 pub fn add_header<'a>(
     header_text: &'a str,
-    name: &'a str,
-    src_path: &'a str,
+    file: &'a str,
+    dest_name: &'a str,
     dest_path: &'a str,
 ) -> Result<&'a str> {
-    let file = format!("{src_path}/{name}");
     let file = path::Path::new(&file);
 
     let doc_mem = fs::read(file.as_os_str())?;
@@ -49,10 +48,10 @@ pub fn add_header<'a>(
     doc.adjust_zero_pages();
 
     let _ = fs::create_dir_all(dest_path);
-    let dest_file = format!("{dest_path}/{name}");
+    let dest_file = format!("{dest_path}/{dest_name}");
     let dest_file = path::Path::new(&dest_file);
 
     doc.save(dest_file).unwrap();
 
-    Ok(name)
+    Ok(dest_name)
 }
