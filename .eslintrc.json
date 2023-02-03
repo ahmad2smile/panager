@@ -17,9 +17,11 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "prettier"
     ],
     "rules": {
+        "prettier/prettier": "error",
         "react/react-in-jsx-scope": "off",
         "indent": [
             "off",
