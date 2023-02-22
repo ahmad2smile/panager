@@ -3,14 +3,14 @@
     "target": "ESNext",
     "baseUrl": "src",
     "paths": {
-      "@components*": [
+      "@/components*": [
         "./components*"
       ],
-      "@utils*": [
-        "./utils*"
-      ],
-      "@models*": [
+      "@/models*": [
         "./models*"
+      ],
+      "@/lib*": [
+        "./lib*"
       ]
     },
     "useDefineForClassFields": true,
