@@ -1,11 +1,15 @@
-import { Button } from "@/components/ui/button";
 import { useBinaryFileState } from "@/lib/file";
-import { useRef } from "react";
 import { read, utils } from "xlsx";
 // @ts-ignore
 import canvasDatagrid from "canvas-datagrid";
+import { useRef } from "react";
+import { Button } from "../ui/button";
 
-const ExcelSource = () => {
+interface IProps {
+	onHeaderSelect(index: number, name: string): void;
+}
+
+const ExcelGrid = ({ onHeaderSelect: onHeaderSelect }: IProps) => {
 	const sheetElementRef = useRef<HTMLDivElement>(null);
 
 	const [_, triggerExcelDialogOpen, excelFilesResetHandler] = useBinaryFileState({
@@ -13,7 +17,6 @@ const ExcelSource = () => {
 	});
 
 	const fileSelectHandler = async () => {
-		excelFilesResetHandler();
 		excelFilesResetHandler();
 
 		const files = await triggerExcelDialogOpen();
@@ -33,34 +36,23 @@ const ExcelSource = () => {
 
 			grid.addEventListener("click", function (e: any) {
 				if (!e.cell) return;
-				console.log("==================================");
-				console.log(
-					JSON.stringify(
-						{
-							cell: e.cell.columnIndex,
-							row: e.cell.rowIndex,
-							isRowHeader: e.cell.isRowHeader,
-							isColumnHeader: e.cell.isColumnHeader
-						},
-						undefined,
-						4
-					)
-				);
-				console.log("==================================");
+				if (!e.cell.isColumnHeader) return;
+
+				onHeaderSelect(e.cell.columnIndex, e.cell.value);
 			});
 		}
 	};
 
 	return (
-		<div className="container h-[calc(100%-2.5rem)] overflow-hidden mx-auto px-5 my-10">
+		<div className="h-full w-full overflow-hidden">
 			<Button className="mb-2" variant="outline" onClick={fileSelectHandler}>
 				Select Excel File
 			</Button>
-			<div className="h-1/2 w-full overflow-hidden">
+			<div className="max-h-36 w-full overflow-hidden">
 				<div className="h-full w-full overflow-auto" ref={sheetElementRef}></div>
 			</div>
 		</div>
 	);
 };
 
-export default ExcelSource;
+export default ExcelGrid;

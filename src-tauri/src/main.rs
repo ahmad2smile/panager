@@ -9,7 +9,7 @@ pub mod pdf_processor;
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 fn add_pdf_header(header_text: &str, file: &str, dest_name: &str, dest_path: &str) {
-    let _ = pdf_processor::add_header(header_text, file, dest_name, dest_path);
+    let _ = pdf_processor::add_header(header_text, file, dest_name, dest_path).unwrap();
 }
 
 #[tauri::command]
