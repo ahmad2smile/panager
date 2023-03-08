@@ -2,8 +2,8 @@
 
 Programmable Manager
 
-## Build
+## Run
 
 ```bash
-npm run tauri dev
+npm run start
 ```
