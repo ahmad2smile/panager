@@ -1,6 +1,6 @@
 import PdfEditor from "./pages/PdfEditor/PdfEditor";
 import ExcelSource from "./pages/ExcelSource/ExcelSource";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs";
 
 import "./App.css";
 import { useState } from "react";
@@ -11,7 +11,7 @@ const TABS = {
 		view: <PdfEditor />
 	},
 	excelSource: {
-		name: "Excel Source",
+		name: "Excel Source (WIP)",
 		view: <ExcelSource />
 	},
 	about: {

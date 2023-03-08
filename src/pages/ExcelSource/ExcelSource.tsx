@@ -1,25 +1,15 @@
-import { Button } from "@/components/ui/button";
-import { useBinaryFileState } from "@/lib/file";
 import { useRef } from "react";
 import { read, utils } from "xlsx";
+import FilePicker from "@/components/FilePicker/FilePicker";
 // @ts-ignore
 import canvasDatagrid from "canvas-datagrid";
 
 const ExcelSource = () => {
 	const sheetElementRef = useRef<HTMLDivElement>(null);
 
-	const [_, triggerExcelDialogOpen, excelFilesResetHandler] = useBinaryFileState({
-		filters: [{ name: "Excel", extensions: ["xlsx"] }]
-	});
-
-	const fileSelectHandler = async () => {
-		excelFilesResetHandler();
-		excelFilesResetHandler();
-
-		const files = await triggerExcelDialogOpen();
-
+	const fileSelectHandler = async (selectedFiles: File[]) => {
 		if (sheetElementRef.current) {
-			const wb = read(files[0]);
+			const wb = read(await selectedFiles[0].arrayBuffer());
 			const data = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 
 			sheetElementRef.current.innerHTML = "";
@@ -53,9 +43,11 @@ const ExcelSource = () => {
 
 	return (
 		<div className="container h-[calc(100%-2.5rem)] overflow-hidden mx-auto px-5 my-10">
-			<Button className="mb-2" variant="outline" onClick={fileSelectHandler}>
-				Select Excel File
-			</Button>
+			<FilePicker
+				accept={{ "application/*": [".xls", ".xlsx"] }}
+				onChange={fileSelectHandler}>
+				Excel
+			</FilePicker>
 			<div className="h-1/2 w-full overflow-hidden">
 				<div className="h-full w-full overflow-auto" ref={sheetElementRef}></div>
 			</div>
