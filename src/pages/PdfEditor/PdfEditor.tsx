@@ -25,10 +25,8 @@ const PdfEditor = () => {
 				selectedPdfFiles.map(async (f) => {
 					const pdfFile = new PdfFile();
 					await pdfFile.loadFile(f);
-					await pdfFile.addText(
+					await pdfFile.addHeader(
 						fileNameTemplate.replace(FILE_NAME_TEMPLATE, f.name),
-						0.01,
-						0.01,
 						0
 					);
 					const content = await pdfFile.getContent();
