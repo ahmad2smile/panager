@@ -1,17 +1,14 @@
 import { PDFDocument, rgb } from "pdf-lib";
 
 export class PdfFile {
-	private _document: PDFDocument = null!;
+	private constructor(private _document: PDFDocument) {}
 
-	async loadFile(file: File) {
+	static async create(file: File): Promise<PdfFile> {
 		const buff = await file.arrayBuffer();
-		this._document = await PDFDocument.load(buff);
-	}
+		const doc = await PDFDocument.load(buff);
 
-	private assertDocumentLoaded() {
-		if (!this._document) {
-			throw new Error("Please load pdf file first, _document not found");
-		}
+		const pdfDoc = new PdfFile(doc);
+		return pdfDoc;
 	}
 
 	/**
@@ -23,8 +20,6 @@ export class PdfFile {
 	 * @param fontSize Number for Font Size (Default: 14)
 	 */
 	async addText(text: string, x: number, y: number, pageIndex: number, fontSize = 14) {
-		this.assertDocumentLoaded();
-
 		const pages = this._document.getPages();
 		const page = pages.at(pageIndex);
 		if (!page) {
@@ -45,8 +40,6 @@ export class PdfFile {
 	 * @param fontSize Number for Font Size (Default: 14)
 	 */
 	async addHeader(text: string, pageIndex: number, fontSize = 14) {
-		this.assertDocumentLoaded();
-
 		const pages = this._document.getPages();
 		const page = pages.at(pageIndex);
 		if (!page) {
@@ -68,9 +61,7 @@ export class PdfFile {
 		page.drawText(text, { color: rgb(0, 0, 1), size: fontSize });
 	}
 
-	getContent() {
-		this.assertDocumentLoaded();
-
+	getData() {
 		return this._document.save();
 	}
 }

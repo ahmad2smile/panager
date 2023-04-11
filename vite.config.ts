@@ -23,7 +23,7 @@ export default defineConfig({
 	clearScreen: false,
 	// tauri expects a fixed port, fail if that port is not available
 	server: {
-		port: 3000,
+		port: 1420,
 		strictPort: true
 	},
 	// to make use of `TAURI_DEBUG` and other env variables
