@@ -2,15 +2,36 @@
 import { ClassValue, clsx } from "clsx";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import {
+	isPermissionGranted,
+	requestPermission,
+	sendNotification
+} from "@tauri-apps/api/notification";
+import { message } from "@tauri-apps/api/dialog";
+
+export const showErrorMessage = async (msg: string) => {
+	await message(msg, { title: "Panager", type: "error" });
+};
 
 export const showErrorNotification = async (
 	opts: Partial<{ title: string; body: string }>,
 	shouldLog = false
 ) => {
-	if (true) {
+	if (shouldLog) {
 		console.log("==================================");
 		console.log(JSON.stringify(opts, undefined, 4));
 		console.log("==================================");
+	}
+
+	let permissionGranted = await isPermissionGranted();
+
+	if (!permissionGranted) {
+		const permission = await requestPermission();
+		permissionGranted = permission === "granted";
+	}
+
+	if (permissionGranted) {
+		sendNotification({ title: "Panager", body: "Failure", ...opts });
 	}
 };
 
@@ -18,10 +39,21 @@ export const showNotification = async (
 	opts: Partial<{ title: string; body: string }>,
 	shouldLog = false
 ) => {
-	if (true) {
+	if (shouldLog) {
 		console.log("==================================");
 		console.log(JSON.stringify(opts, undefined, 4));
 		console.log("==================================");
+	}
+
+	let permissionGranted = await isPermissionGranted();
+
+	if (!permissionGranted) {
+		const permission = await requestPermission();
+		permissionGranted = permission === "granted";
+	}
+
+	if (permissionGranted) {
+		sendNotification({ title: "Panager", body: "Done", ...opts });
 	}
 };
 

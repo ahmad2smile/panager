@@ -1,10 +1,11 @@
 import { PDFDocument, rgb } from "pdf-lib";
+import { readFile } from "./file";
 
 export class PdfFile {
 	private constructor(private _document: PDFDocument) {}
 
-	static async create(file: File): Promise<PdfFile> {
-		const buff = await file.arrayBuffer();
+	static async create(path: string): Promise<PdfFile> {
+		const buff = await readFile(path);
 		const doc = await PDFDocument.load(buff);
 
 		const pdfDoc = new PdfFile(doc);

@@ -2,17 +2,26 @@ import { BsArrowRightCircle, BsFillFileEarmarkPdfFill } from "react-icons/bs";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FILE_NAME_TEMPLATE, useDirExplorerState } from "@/lib/file";
+import {
+	FILE_NAME_TEMPLATE,
+	getFileName,
+	joinPaths,
+	saveFile,
+	useDirState,
+	useFilesState
+} from "@/lib/file";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { showErrorNotification, showNotification } from "@/lib/utils";
+import { showErrorMessage, showErrorNotification, showNotification } from "@/lib/utils";
 import { FolderDownIcon } from "lucide-react";
 import FilePicker from "@/components/FilePicker/FilePicker";
 import { PdfFile } from "@/lib/pdfFile";
 
 const PdfEditor = () => {
-	const [selectedOutputDir, triggerOutputDirDialogOpen, saveFileHandler] = useDirExplorerState();
-	const [selectedPdfFiles, setSelectedPdfFiles] = useState<File[]>([]);
+	const [selectedOutputDir, setSelectedOutputDir] = useDirState();
+	const [selectedPdfFiles, setSelectedPdfFiles] = useFilesState([
+		{ name: "Pdf files", extensions: ["pdf", "PDF"] }
+	]);
 	const [fileNameTemplate, setFileNameTemplate] = useState(FILE_NAME_TEMPLATE);
 
 	const handleFileNameTemplate = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,29 +29,41 @@ const PdfEditor = () => {
 	};
 
 	const handlePdfProcessing = async () => {
+		if (!selectedOutputDir) {
+			await showErrorMessage("Please select destination directory");
+			return;
+		}
+
 		try {
 			await Promise.all(
 				selectedPdfFiles.map(async (f) => {
 					const pdfFile = await PdfFile.create(f);
 
-					await pdfFile.addHeader(
-						fileNameTemplate.replace(FILE_NAME_TEMPLATE, f.name),
-						0
+					const fileName = getFileName(f);
+					const header = fileNameTemplate.replace(
+						FILE_NAME_TEMPLATE,
+						fileName.split(".").at(0) || f
 					);
+
+					await pdfFile.addHeader(header, 0);
 					const content = await pdfFile.getData();
 
-					await saveFileHandler(f.name, content);
+					const finalPath = await joinPaths(selectedOutputDir, fileName);
+
+					console.log("Final Path: ", finalPath);
+
+					await saveFile(finalPath, content);
 				})
 			);
 
 			showNotification({ title: "Panager", body: "Processed files" });
 		} catch (error) {
-			showErrorNotification({ body: (error as Error).message });
-		}
-	};
+			console.log("==================================");
+			console.log(JSON.stringify({ error }, undefined, 4));
+			console.log("==================================");
 
-	const handleSelectDir = async () => {
-		await triggerOutputDirDialogOpen();
+			showErrorNotification({ body: "Unable to process files and save in given directory" });
+		}
 	};
 
 	return (
@@ -61,28 +82,30 @@ const PdfEditor = () => {
 			<div>
 				<p>Output Folder:</p>
 			</div>
-			<div className="my-5 bg-gray-50 pl-3 py-3 cursor-pointer" onClick={handleSelectDir}>
+			<div
+				className="my-5 bg-gray-50 pl-3 py-3 cursor-pointer"
+				onClick={setSelectedOutputDir}>
 				<div className="flex">
 					<FolderDownIcon className="text-sky-500 mr-3" />
-					<p>/{selectedOutputDir}</p>
+					<p>
+						{selectedOutputDir
+							? "/" + getFileName(selectedOutputDir)
+							: "Please select output dir"}
+					</p>
 				</div>
 			</div>
 			<div className="w-full my-5">
-				<FilePicker
-					accept={{ "application/*": [".pdf", ".PDF"] }}
-					onChange={setSelectedPdfFiles}>
-					PDFs
-				</FilePicker>
+				<FilePicker onClick={setSelectedPdfFiles}>PDFs</FilePicker>
 			</div>
 			<ScrollArea className="my-4 h-72 w-full rounded-md border border-slate-100 dark:border-slate-700">
 				<div className="p-4">
 					<h4 className="mb-4 text-sm font-medium leading-none">Files:</h4>
 					{selectedPdfFiles.map((f, i) => (
-						<React.Fragment key={f.name}>
+						<React.Fragment key={f}>
 							<div className="text-sm">
 								<span className="flex items-center">
 									<BsFillFileEarmarkPdfFill size={25} className="text-red-500" />
-									<p className="ml-2 my-2">{f.name}</p>
+									<p className="ml-2 my-2">{getFileName(f)}</p>
 								</span>
 							</div>
 							{i !== selectedPdfFiles.length - 1 && <Separator className="my-2" />}

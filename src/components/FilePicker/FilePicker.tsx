@@ -1,25 +1,14 @@
-import { Accept, useDropzone } from "react-dropzone";
-
 interface IProps {
 	children: React.ReactNode;
-	/** type ex: {  "application/*": [".pdf", ".PDF"] */
-	accept: Accept;
-	onChange(files: File[]): void;
+	onClick(): void;
 }
 
-const FilePicker = ({ children, accept, onChange }: IProps) => {
-	const { getRootProps, getInputProps } = useDropzone({
-		accept,
-		onDrop: (selectedFiles: File[]) => {
-			onChange(selectedFiles);
-		}
-	});
-
+const FilePicker = ({ children, onClick }: IProps) => {
 	return (
 		<div>
 			<label className="block font-medium text-gray-700 my-4">{children}</label>
 			<div
-				{...getRootProps({ className: "dropzone" })}
+				onClick={onClick}
 				className="mt-1 cursor-pointer flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
 				<div className="space-y-1 text-center">
 					<svg
@@ -44,7 +33,6 @@ const FilePicker = ({ children, accept, onChange }: IProps) => {
 						<p className="pl-1">or drag and drop</p>
 					</div>
 					<p className="text-xs text-gray-500">Files</p>
-					<input {...getInputProps()} />
 				</div>
 			</div>
 		</div>
