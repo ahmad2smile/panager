@@ -1139,6 +1139,11 @@
     "@tauri-apps/cli-win32-ia32-msvc" "1.2.3"
     "@tauri-apps/cli-win32-x64-msvc" "1.2.3"
 
+"@types/franc@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@types/franc/-/franc-5.0.1.tgz#c36a1cc2f269968cef679d5e4433a90034967da2"
+  integrity sha512-aGfC4aZ5hUEGBgyWIsihtWxwXCwYXc4eAbT7HaorjITpEPCQyPRj9NqNJ3BrdrKCqV5hHmFao6Vuph/HZ6CalA==
+
 "@types/json-schema@^7.0.9":
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
@@ -1608,6 +1613,11 @@ codepage@~1.15.0:
   resolved "https://registry.yarnpkg.com/codepage/-/codepage-1.15.0.tgz#2e00519024b39424ec66eeb3ec07227e692618ab"
   integrity sha512-3g6NUTPd/YtuuGrhMnOMRjFc+LJw/bnMp3+0r/Wcz3IXUuCosKRJvMphm5+Q+bvTVGcJJuRvVLuYba+WojaFaA==
 
+collapse-white-space@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/collapse-white-space/-/collapse-white-space-2.1.0.tgz#640257174f9f42c740b40f3b55ee752924feefca"
+  integrity sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw==
+
 color-convert@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
@@ -1637,7 +1647,15 @@ commander@^4.0.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
 
-compromise@^14.8.2:
+compromise-dates@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/compromise-dates/-/compromise-dates-3.4.1.tgz#29ae8834945b202a85b1e604ce36cfb996e8f502"
+  integrity sha512-5IRiIxuOXgRyzFy8Or+BaFLFTMLB4aV8Y88ynytvgSDb/xcGT93AKCEgxSLw7Gp1qlWZ7ZJ5X8UnrrtPRdK3hQ==
+  dependencies:
+    spacetime "7.1.4"
+    spacetime-holiday "0.3.0"
+
+compromise@14.8.2, compromise@^14.8.2:
   version "14.8.2"
   resolved "https://registry.yarnpkg.com/compromise/-/compromise-14.8.2.tgz#a3f1e7da15c7791fe477f7d0e153b091966b26ab"
   integrity sha512-B/2MxDx2R1U8QlZPZycypvqv/JfSPJSyh/sTUxIuteSja5ABWzHoLpaTGmRiai1GX7wKA1pOSSwtp4XRFGDKnA==
@@ -1691,6 +1709,15 @@ csstype@^3.0.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
+
+de-compromise@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/de-compromise/-/de-compromise-0.0.9.tgz#4fec03a4838f370b99cbe444ad64b974e2ec839d"
+  integrity sha512-zt6K8XAGWM3Cdzu7LjCq4xbnsn4LMm1P4O5ABS8nASwL/Twgn2wo+dx5wz7Eu2+bHE9ocCfjwO1WHmP9sufxVQ==
+  dependencies:
+    compromise "14.8.2"
+    efrt "2.7.0"
+    suffix-thumb "5.0.2"
 
 debug@^3.2.6:
   version "3.2.7"
@@ -2137,6 +2164,13 @@ fraction.js@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.2.0.tgz#448e5109a313a3527f5a3ab2119ec4cf0e0e2950"
   integrity sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==
+
+franc-min@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/franc-min/-/franc-min-6.1.0.tgz#bb67d0ff991be5eb58ac5408681c9a06932c071e"
+  integrity sha512-ZGKRCVw//1KvlLjeRjNTYB27Py6bq1J+0smr3IalQ4l7ZYR9DeoeLxjGWQKQ0Hr8n2dIjkfOvCzr7nzejljeJg==
+  dependencies:
+    trigram-utils "^2.0.0"
 
 fs.realpath@^1.0.0:
   version "1.0.0"
@@ -2782,6 +2816,11 @@ mz@^2.7.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
+n-gram@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/n-gram/-/n-gram-2.0.2.tgz#e544a7dffefc49c22d898b2f491e787941b3a2ba"
+  integrity sha512-S24aGsn+HLBxUGVAUFOwGpKs7LBcG4RudKU//eWzt/mQ97/NMKQxDWHyHx63UNWk/OOdihgmzoETn1tf5nQDzQ==
+
 nanoid@^3.3.4:
   version "3.3.6"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.6.tgz#443380c856d6e9f9824267d960b4236ad583ea4c"
@@ -3408,6 +3447,16 @@ source-map@~0.6.0:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
+spacetime-holiday@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/spacetime-holiday/-/spacetime-holiday-0.3.0.tgz#b61aa30dd4deb566362001ab2231bbf54cb5d0ce"
+  integrity sha512-rp4HRFJXxFL7CeKBFBMO2Xar2IyJyUpxY1ssAWCyf0iOvckwknvDgK04KwToASHX9vgd+4yQnTpytzJAs81R8g==
+
+spacetime@7.1.4:
+  version "7.1.4"
+  resolved "https://registry.yarnpkg.com/spacetime/-/spacetime-7.1.4.tgz#f288e4dcecbb0ec56e76c3b2a09c55badc18cebe"
+  integrity sha512-ZzYuGjaMPE42p/fVU9Qcd+aMhgYzC83hgqMKyWlGILtponsLm5KJZgWzblLnOU8OblMQa3YXo/0IiZZ5JsTDfA==
+
 ssf@~0.11.2:
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/ssf/-/ssf-0.11.2.tgz#0b99698b237548d088fc43cdf2b70c1a7512c06c"
@@ -3507,6 +3556,11 @@ suffix-thumb@4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/suffix-thumb/-/suffix-thumb-4.0.2.tgz#9303c1be8252bf79d9c57e5737d7d849d1f6abc9"
   integrity sha512-CCvCAr7JyeQoO+/lyq3P2foZI/xJz5kpG3L6kg2CaOf9K2/gaM9ixy/JTuRwjEK38l306zE7vl3JoOZYmLQLlA==
+
+suffix-thumb@5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/suffix-thumb/-/suffix-thumb-5.0.2.tgz#b38940faddb3ae8b5fd281c7ec5830c25a6b2c9c"
+  integrity sha512-I5PWXAFKx3FYnI9a+dQMWNqTxoRt6vdBdb0O+BJ1sxXCWtSoQCusc13E58f+9p4MYx/qCnEMkD5jac6K2j3dgA==
 
 supports-color@^2.0.0:
   version "2.0.0"
@@ -3614,6 +3668,14 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+trigram-utils@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/trigram-utils/-/trigram-utils-2.0.1.tgz#d22c08350f2cc7ae02ce6d497732db3ef43c8722"
+  integrity sha512-nfWIXHEaB+HdyslAfMxSqWKDdmqY9I32jS7GnqpdWQnLH89r6A5sdk3fDVYqGAZ0CrT8ovAFSAo6HRiWcWNIGQ==
+  dependencies:
+    collapse-white-space "^2.0.0"
+    n-gram "^2.0.0"
 
 ts-interface-checker@^0.1.9:
   version "0.1.13"

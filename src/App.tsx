@@ -1,5 +1,4 @@
 import PdfEditor from "./pages/PdfEditor/PdfEditor";
-import ExcelSource from "./pages/ExcelSource/ExcelSource";
 import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs";
 
 import "./App.css";
@@ -7,12 +6,8 @@ import { useState } from "react";
 
 const TABS = {
 	pdfEditor: {
-		name: "Pdf Editor",
+		name: "Invoicer",
 		view: <PdfEditor />
-	},
-	excelSource: {
-		name: "Excel Source (WIP)",
-		view: <ExcelSource />
 	},
 	about: {
 		name: "About",
@@ -45,11 +40,11 @@ const App = () => {
 					</TabsTrigger>
 				))}
 			</TabsList>
-			<div
+			{/* <div
 				style={{ display: tab === "excelSource" ? "block" : "none" }}
 				className="w-[calc(100%-19rem)] h-[calc(100%-1rem)]">
 				<ExcelSource />
-			</div>
+			</div> */}
 			<div
 				style={{ display: tab === "pdfEditor" ? "block" : "none" }}
 				className="w-[calc(100%-19rem)] h-[calc(100%-1rem)]">

@@ -8,6 +8,16 @@ import {
 	sendNotification
 } from "@tauri-apps/api/notification";
 import { message } from "@tauri-apps/api/dialog";
+import { invoke } from "@tauri-apps/api";
+import { Invoice } from "@/models/Invoice";
+
+export const createExcel = async (values: Invoice[], path: string): Promise<string> => {
+	return invoke("create_xlsx", { values, path });
+};
+
+export const extractPdfText = async (path: string): Promise<string> => {
+	return invoke("pdf_extract_text", { path });
+};
 
 export const showErrorMessage = async (msg: string) => {
 	await message(msg, { title: "Panager", type: "error" });

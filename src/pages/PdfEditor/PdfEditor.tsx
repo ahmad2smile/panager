@@ -12,12 +12,22 @@ import {
 } from "@/lib/file";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { showErrorMessage, showErrorNotification, showNotification } from "@/lib/utils";
+import {
+	createExcel,
+	showErrorMessage,
+	showErrorNotification,
+	showNotification
+} from "@/lib/utils";
 import { FolderDownIcon } from "lucide-react";
 import FilePicker from "@/components/FilePicker/FilePicker";
 import { PdfFile } from "@/lib/pdfFile";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Invoice } from "@/models/Invoice";
+import { processInvoice } from "@/lib/processInvoice";
 
 const PdfEditor = () => {
+	const [extractsummary, setExtractSummary] = useState(true);
 	const [selectedOutputDir, setSelectedOutputDir] = useDirState();
 	const [selectedPdfFiles, setSelectedPdfFiles] = useFilesState([
 		{ name: "Pdf files", extensions: ["pdf", "PDF"] }
@@ -35,9 +45,15 @@ const PdfEditor = () => {
 		}
 
 		try {
+			const invoices: Invoice[] = [];
+
 			await Promise.all(
 				selectedPdfFiles.map(async (f) => {
-					const pdfFile = await PdfFile.create(f);
+					if (extractsummary) {
+						const invoice = await processInvoice(f);
+
+						invoices.push(invoice);
+					}
 
 					const fileName = getFileName(f);
 					const header = fileNameTemplate.replace(
@@ -45,16 +61,19 @@ const PdfEditor = () => {
 						fileName.split(".").at(0) || f
 					);
 
+					const pdfFile = await PdfFile.create(f);
 					await pdfFile.addHeader(header, 0);
 					const content = await pdfFile.getData();
 
 					const finalPath = await joinPaths(selectedOutputDir, fileName);
 
-					console.log("Final Path: ", finalPath);
-
 					await saveFile(finalPath, content);
 				})
 			);
+
+			if (extractsummary) {
+				await createExcel(invoices, await joinPaths(selectedOutputDir, "summary.xlsx"));
+			}
 
 			showNotification({ title: "Panager", body: "Processed files" });
 		} catch (error) {
@@ -115,6 +134,16 @@ const PdfEditor = () => {
 			</ScrollArea>
 			<div>
 				<div className="flex justify-end items-center bg-gray-50 rounded-sm h-20 sm:px-6">
+					<div className="flex items-center space-x-2 pr-12 poin">
+						<Label className="cursor-pointer" htmlFor="extract-summary">
+							Extract Excel Summary
+						</Label>
+						<Switch
+							checked={extractsummary}
+							onCheckedChange={setExtractSummary}
+							id="extract-summary"
+						/>
+					</div>
 					<Button
 						className="inline-flex h-12 justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 						variant="outline"
