@@ -67,7 +67,7 @@ const PdfEditor = () => {
 					const fileName = getFileName(f);
 					const header = fileNameTemplate.replace(
 						FILE_NAME_TEMPLATE,
-						fileName.split(".").at(0) || f
+						fileName.split(".")[0] || f
 					);
 
 					const pdfFile = await PdfFile.create(f);

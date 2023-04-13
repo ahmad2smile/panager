@@ -22,7 +22,7 @@ export class PdfFile {
 	 */
 	async addText(text: string, x: number, y: number, pageIndex: number, fontSize = 14) {
 		const pages = this._document.getPages();
-		const page = pages.at(pageIndex);
+		const page = pages[pageIndex];
 		if (!page) {
 			throw new Error(`Given page not found ${pageIndex}`);
 		}
@@ -42,7 +42,7 @@ export class PdfFile {
 	 */
 	async addHeader(text: string, pageIndex: number, fontSize = 14) {
 		const pages = this._document.getPages();
-		const page = pages.at(pageIndex);
+		const page = pages[pageIndex];
 		if (!page) {
 			throw new Error(`Given page not found ${pageIndex}`);
 		}
