@@ -8,7 +8,6 @@ const projectRootDir = resolve(__dirname);
  * @type {import('vite').UserConfig}
  */
 export default defineConfig({
-	base: "panager",
 	plugins: [react()],
 	resolve: {
 		alias: {

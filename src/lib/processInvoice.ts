@@ -1,7 +1,7 @@
-// import { franc } from "franc";
+import { franc } from "franc-min";
 import { extractPdfText } from "./utils";
 // @ts-ignore
-// import nlpd from "de-compromise";
+import nlpd from "de-compromise";
 import nlp from "compromise/three";
 // @ts-ignore
 import plg from "compromise-dates";
@@ -13,7 +13,20 @@ export async function processInvoice(path: string): Promise<Invoice> {
 
 	nlp.plugin(plg);
 
-	const doc = nlp(content);
+	const isGermanLang = franc(content) === "deu";
+	const doc = isGermanLang ? nlpd(content) : nlp(content);
+
+	const totalStr = doc.money().last().text();
+
+	let total = 0;
+
+	if (isGermanLang) {
+		const placeholder = totalStr.replace(",", "#");
+
+		total = Number(placeholder.replaceAll(".", "").replaceAll("#", ".") || 0);
+	} else {
+		total = Number(totalStr || 0);
+	}
 
 	return {
 		invoice_number: doc.match("/^[0-9]{12,18}$/").last().text(),
@@ -25,7 +38,7 @@ export async function processInvoice(path: string): Promise<Invoice> {
 		company: doc.matchOne("#Company").text(),
 		// website: doc.matchOne("#Url").text(),
 		// email: doc.matchOne("#Email").text(),
-		total: Number(doc.match("#Money").last().text()),
+		total,
 		currency: doc.matchOne("#Currency").text(),
 		file: getFileName(path)
 	} as Invoice;

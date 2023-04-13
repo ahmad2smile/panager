@@ -7,7 +7,9 @@ import canvasDatagrid from "canvas-datagrid";
 const ExcelSource = () => {
 	const sheetElementRef = useRef<HTMLDivElement>(null);
 
-	const fileSelectHandler = async (selectedFiles: File[]) => {
+	const fileSelectHandler = async () => {
+		const selectedFiles: File[] = [];
+
 		if (sheetElementRef.current) {
 			const wb = read(await selectedFiles[0].arrayBuffer());
 			const data = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
@@ -43,11 +45,7 @@ const ExcelSource = () => {
 
 	return (
 		<div className="container h-[calc(100%-2.5rem)] overflow-hidden mx-auto px-5 my-10">
-			<FilePicker
-				accept={{ "application/*": [".xls", ".xlsx"] }}
-				onChange={fileSelectHandler}>
-				Excel
-			</FilePicker>
+			<FilePicker onClick={fileSelectHandler}>Excel</FilePicker>
 			<div className="h-1/2 w-full overflow-hidden">
 				<div className="h-full w-full overflow-auto" ref={sheetElementRef}></div>
 			</div>

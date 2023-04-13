@@ -46,13 +46,22 @@ const PdfEditor = () => {
 
 		try {
 			const invoices: Invoice[] = [];
+			const failedInvoices: string[] = [];
 
 			await Promise.all(
 				selectedPdfFiles.map(async (f) => {
 					if (extractsummary) {
-						const invoice = await processInvoice(f);
+						processInvoice(f)
+							.then((i) => {
+								invoices.push(i);
+							})
+							.catch((err) => {
+								console.log("==================================");
+								console.log(JSON.stringify({ err }, undefined, 4));
+								console.log("==================================");
 
-						invoices.push(invoice);
+								failedInvoices.push(f);
+							});
 					}
 
 					const fileName = getFileName(f);
@@ -71,8 +80,14 @@ const PdfEditor = () => {
 				})
 			);
 
-			if (extractsummary) {
+			if (extractsummary && invoices.length) {
 				await createExcel(invoices, await joinPaths(selectedOutputDir, "summary.xlsx"));
+			}
+
+			if (failedInvoices.length) {
+				showErrorNotification({
+					body: `Following invoices failed to summerize, ${failedInvoices.join(", ")}`
+				});
 			}
 
 			showNotification({ title: "Panager", body: "Processed files" });

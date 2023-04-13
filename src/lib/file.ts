@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DialogFilter, open } from "@tauri-apps/api/dialog";
-import { BaseDirectory, downloadDir, join, sep } from "@tauri-apps/api/path";
+import { BaseDirectory, documentDir, join, sep } from "@tauri-apps/api/path";
 import { readBinaryFile, writeBinaryFile } from "@tauri-apps/api/fs";
 import { showNotification } from "./utils";
 
@@ -111,7 +111,7 @@ export const useDirState = () => {
 			const selected = await open({
 				directory: true,
 				multiple: false,
-				defaultPath: await downloadDir()
+				defaultPath: await documentDir()
 			});
 
 			if (Array.isArray(selected)) {

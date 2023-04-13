@@ -1139,11 +1139,6 @@
     "@tauri-apps/cli-win32-ia32-msvc" "1.2.3"
     "@tauri-apps/cli-win32-x64-msvc" "1.2.3"
 
-"@types/franc@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@types/franc/-/franc-5.0.1.tgz#c36a1cc2f269968cef679d5e4433a90034967da2"
-  integrity sha512-aGfC4aZ5hUEGBgyWIsihtWxwXCwYXc4eAbT7HaorjITpEPCQyPRj9NqNJ3BrdrKCqV5hHmFao6Vuph/HZ6CalA==
-
 "@types/json-schema@^7.0.9":
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
